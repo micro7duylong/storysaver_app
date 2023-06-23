@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:storysaver_app/models/cart.dart';
-import 'package:storysaver_app/models/catalog.dart';
 import 'package:storysaver_app/models/img_data_provider.dart';
 import 'package:storysaver_app/models/slected_image.dart';
 
