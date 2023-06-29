@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:storysaver_app/models/image_modal.dart';
-import 'package:storysaver_app/screens/home_screen.dart';
 import 'package:storysaver_app/screens/modal/export_modal.dart';
-import 'package:storysaver_app/screens/modal/manage_note_modal.dart';
-import 'package:storysaver_app/screens/note_screen.dart';
+import 'package:storysaver_app/widgets/test_calendar.dart';
 import 'package:storysaver_app/widgets/device_size.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -23,6 +21,12 @@ class _SettingScreenState extends State<SettingScreen> {
   double _aspectRatio = 0.6;
   ViewType _viewType = ViewType.grid;
   List<ImageData> itemList = ImageData.getImageDataList();
+  DateTime today = DateTime.now();
+  void _onDaySelected(DateTime day, DateTime focusedDay) {
+    setState(() {
+      today = day;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +96,9 @@ class _SettingScreenState extends State<SettingScreen> {
           Column(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
                 icon: Icon(
                   Icons.copy,
                 ),
@@ -107,7 +113,9 @@ class _SettingScreenState extends State<SettingScreen> {
           Column(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  _showCalendarModal(context);
+                },
                 icon: Icon(Icons.notifications_none_outlined),
                 color: Colors.blue,
               ),
@@ -131,6 +139,54 @@ class _SettingScreenState extends State<SettingScreen> {
                 style: TextStyle(color: Colors.red, fontSize: 12),
               )
             ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void _showCalendarModal(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text('Reminder'),
+          ),
+          body: Column(
+            children: [
+              _buildEnableOption(),
+              CalenderWidget(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEnableOption() {
+    double screenWidth = DeviceSize.width(context);
+    bool enable = true;
+
+    return Container(
+      width: screenWidth,
+      margin: EdgeInsets.all(5),
+      child: Row(
+        children: [
+          Text('Enable',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              )),
+          Expanded(child: Container()),
+          Switch(
+            activeColor: Colors.blue,
+            value: enable,
+            onChanged: (bool value) {
+              setState(() {
+                enable = value;
+              });
+            },
           )
         ],
       ),

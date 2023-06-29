@@ -20,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   double _aspectRatio = 0.6;
   bool isSearching = false;
+  bool hasResults = true;
   String searchText = '';
 
   ViewType _viewType = ViewType.grid;
@@ -52,10 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.blue,
             ),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingScreen()),
-              );
+              _showSetting(context);
             },
           )
         ],
@@ -166,7 +164,10 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.blue,
             ),
             onPressed: () {
-              // Handle button 6 press
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingScreen()),
+              );
             },
           ),
         ],
@@ -174,10 +175,108 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildListView() {
-    List<ImageData> displayList =
-        searchText.isEmpty ? itemList : filteredItemList;
+  void _showSetting(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoTheme(
+        data: CupertinoThemeData(
+          barBackgroundColor: Colors.grey[700],
+          textTheme: CupertinoTextThemeData(primaryColor: Colors.white),
+        ),
+        child: CupertinoActionSheet(
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.notifications_none_outlined),
+                    Text('Reminder'),
+                    Spacer(),
+                    Text('None'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.edit),
+                    const Text('Rename'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.copy),
+                    const Text('Duplicate'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  children: [
+                    Icon(Icons.import_export),
+                    const Text('Export'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  children: [
+                    Icon(Icons.delete_forever),
+                    const Text(
+                      'Delete',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Done'),
+          ),
+        ),
+      ),
+    );
+  }
 
+  Widget _buildListView() {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(10),
@@ -189,9 +288,15 @@ class _HomeScreenState extends State<HomeScreen> {
           child: GridView.count(
             crossAxisCount: _crossAxisCount,
             childAspectRatio: _aspectRatio,
-            children: displayList.map((ImageData imageData) {
-              return getGridItem(imageData);
-            }).toList(),
+            children: isSearching
+                ? filteredItemList.length > 0
+                    ? filteredItemList.map((ImageData imageData) {
+                        return getGridItem(imageData);
+                      }).toList()
+                    : [Text('No results is found')]
+                : itemList.map((ImageData imageData) {
+                    return getGridItem(imageData);
+                  }).toList(),
           ),
         ),
       ),
@@ -217,18 +322,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _FloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      shape: CircleBorder(),
-      onPressed: () {
-        setState(() {
-          showListView = !showListView;
-        });
-        CreateNoteModal.showCreateNote(context);
-      },
-      child: Image(
-        image: AssetImage('assets/images/notebook_logo.png'),
-        height: 30,
-        width: 30,
+    return Visibility(
+      visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+      child: FloatingActionButton(
+        shape: CircleBorder(),
+        onPressed: () {
+          setState(() {
+            showListView = !showListView;
+          });
+          CreateNoteModal.showCreateNote(context);
+        },
+        child: Image(
+          image: AssetImage('assets/images/notebook_logo.png'),
+          height: 30,
+          width: 30,
+        ),
       ),
     );
   }

@@ -1,153 +1,76 @@
+// import 'package:flutter/material.dart';
+// import 'package:table_calendar/table_calendar.dart';
 
-//   import 'package:flutter/material.dart';
-// import 'package:storysaver_app/models/image_modal.dart';
+// import 'package:flutter/material.dart';
+// import 'package:table_calendar/table_calendar.dart';
+// import 'package:flutter/material.dart';
+// import 'package:table_calendar/table_calendar.dart';
 
-// GridTile getGridItem(ImageData imageData) {
-//     return GridTile(
-//       child: (_viewType == ViewType.list)
-//           ? GestureDetector(
-//               onTap: () {
-//                 // Handle item tap event
-//               },
-//               child: Container(
-//                 margin: const EdgeInsets.only(top: 5, bottom: 10),
-//                 child: Row(
-//                   children: [
-//                     ClipRRect(
-//                         borderRadius: BorderRadius.circular(10),
-//                         child: Container(
-//                           width: 100,
-//                           height: 150,
-//                           child: Image.asset(
-//                             imageData.path,
-//                             fit: BoxFit.cover,
-//                           ),
-//                           // child: Image.network(
-//                           //   fit: BoxFit.cover,
-//                           //   imageData.path,
-//                           // ),
-//                         )),
-//                     const SizedBox(
-//                       width: 5,
-//                     ),
-//                     Column(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Text(
-//                           imageData.title,
-//                           style:
-//                               const TextStyle(fontSize: 15, color: Colors.blue),
-//                         ),
-//                         Text(
-//                           imageData.date,
-//                           style:
-//                               const TextStyle(fontSize: 15, color: Colors.grey),
-//                         ),
-//                       ],
-//                     ),
-//                     Expanded(
-//                       child: Container(),
-//                     ),
-//                     IconButton(
-//                         onPressed: () {},
-//                         icon: Icon(
-//                           Icons.keyboard_arrow_down,
-//                           color: Colors.blue,
-//                         )),
-//                     IconButton(
-//                       icon: Icon(
-//                         imageData.isFavorite
-//                             ? Icons.favorite_outlined
-//                             : Icons.favorite,
-//                         color: imageData.isFavorite ? Colors.blue : Colors.grey,
-//                       ),
-//                       onPressed: () {
-//                         setState(() {
-//                           imageData.isFavorite = !imageData.isFavorite;
-//                         });
-//                       },
-//                     ),
-//                   ],
+// class CalendarWidget extends StatefulWidget {
+//   @override
+//   _CalendarWidgetState createState() => _CalendarWidgetState();
+// }
+
+// class _CalendarWidgetState extends State<CalendarWidget> {
+// CalendarController _calendarController = CalendarController();
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _calendarController = CalendarController();
+//   }
+
+//   @override
+//   void dispose() {
+//     _calendarController.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: Column(
+//         children: [
+//           TableCalendar(
+//             calendarController: _calendarController,
+//             // Các thuộc tính và sự kiện của calendar
+//             initialCalendarFormat: CalendarFormat.month,
+//             startingDayOfWeek: StartingDayOfWeek.monday,
+//             builders: CalendarBuilders(
+//               selectedDayBuilder: (context, date, events) => Container(
+//                 margin: const EdgeInsets.all(4.0),
+//                 alignment: Alignment.center,
+//                 decoration: BoxDecoration(
+//                   color: Colors.blue,
+//                   shape: BoxShape.circle,
+//                 ),
+//                 child: Text(
+//                   date.day.toString(),
+//                   style: TextStyle(color: Colors.white),
 //                 ),
 //               ),
-//             )
-//           : Container(
-//               child: Expanded(
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Expanded(
-//                       child: Container(
-//                         child: Stack(
-//                           children: [
-//                             SizedBox(
-//                               width: 150,
-//                               // child: Image.network(
-//                               //   imageData.path,
-//                               //   fit: BoxFit.cover,
-//                               // ),
-//                               child: Image.asset(
-//                                 imageData.path,
-//                                 fit: BoxFit.cover,
-//                               ),
-//                             ),
-//                             Positioned(
-//                               top: 5,
-//                               right: 5,
-//                               child: IconButton(
-//                                 icon: Icon(
-//                                   imageData.isFavorite
-//                                       ? Icons.favorite
-//                                       : Icons.favorite_border,
-//                                   color: imageData.isFavorite
-//                                       ? Colors.blue
-//                                       : Colors.white,
-//                                 ),
-//                                 onPressed: () {
-//                                   setState(() {
-//                                     imageData.isFavorite =
-//                                         !imageData.isFavorite;
-//                                   });
-//                                 },
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.start,
-//                       children: [
-//                         Text(
-//                           imageData.title,
-//                           style:
-//                               const TextStyle(fontSize: 15, color: Colors.blue),
-//                         ),
-//                         Expanded(
-//                           child: Container(),
-//                         ),
-//                         IconButton(
-//                             onPressed: () {},
-//                             icon: Icon(
-//                               Icons.keyboard_arrow_down,
-//                               color: Colors.blue,
-//                             ))
-//                       ],
-//                     ),
-//                     Text(
-//                       imageData.date,
-//                       style: const TextStyle(fontSize: 15, color: Colors.grey),
-//                     ),
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-//                   ],
+//               todayDayBuilder: (context, date, events) => Container(
+//                 margin: const EdgeInsets.all(4.0),
+//                 alignment: Alignment.center,
+//                 decoration: BoxDecoration(
+//                   color: Colors.red,
+//                   shape: BoxShape.circle,
+//                 ),
+//                 child: Text(
+//                   date.day.toString(),
+//                   style: TextStyle(color: Colors.white),
 //                 ),
 //               ),
 //             ),
+//           ),
+//           ElevatedButton(
+//             onPressed: () {
+//               Navigator.pop(context);
+//             },
+//             child: Text('Close'),
+//           ),
+//         ],
+//       ),
 //     );
 //   }
 // }
-
-// enum ViewType { grid, list }
