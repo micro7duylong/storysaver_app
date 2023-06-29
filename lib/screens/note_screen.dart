@@ -70,7 +70,8 @@ class _NotesScreenState extends State<NotesScreen> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    _showPopoverMenu(context);
+                     _showSetting(context);
+                  //  _showPopoverMenu(context);
                   },
                 ),
               ),
@@ -104,7 +105,7 @@ class _NotesScreenState extends State<NotesScreen> {
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  // Handle button 6 press
+                  _showSetting(context);
                 },
               ),
             ],
@@ -133,6 +134,75 @@ class _NotesScreenState extends State<NotesScreen> {
     );
   }
 
+  void _showSetting(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoTheme(
+        data: CupertinoThemeData(
+          barBackgroundColor: Colors.grey[700],
+          textTheme: CupertinoTextThemeData(primaryColor: Colors.white),
+        ),
+        child: CupertinoActionSheet(
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.copy),
+                    const Text('Duplicate'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  children: [
+                    Icon(Icons.import_export),
+                    const Text('Export'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  children: [
+                    Icon(Icons.delete_forever),
+                    const Text(
+                      'Delete',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Done'),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildCover(context) {
     double screenWidth = DeviceSize.width(context);
     double screenHeight = DeviceSize.height(context);
@@ -142,14 +212,18 @@ class _NotesScreenState extends State<NotesScreen> {
       margin: EdgeInsets.only(bottom: 15),
       height: screenHeight,
       width: screenWidth,
-      child: Image.network(
+      // child: Image.network(
+      //   imageUrl,
+      //   fit: BoxFit.cover,
+      // ),
+      child: Image.asset(
         imageUrl,
         fit: BoxFit.cover,
       ),
     );
   }
 
-  Widget _buildPagetest(context) {
+  Widget _buildPage(context) {
     double screenWidth = DeviceSize.width(context);
     return Container(
       child: ListView.builder(
@@ -161,9 +235,13 @@ class _NotesScreenState extends State<NotesScreen> {
           return ListTile(
             title: Container(
               width: screenWidth,
-              child: Image.network(
+              // child: Image.network(
+              //   imageUrl,
+              //   fit: BoxFit.fill,
+              // ),
+              child: Image.asset(
                 imageUrl,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
               ),
             ),
           );
@@ -176,7 +254,7 @@ class _NotesScreenState extends State<NotesScreen> {
     return SingleChildScrollView(
       child: Column(children: [
         _buildCover(context),
-        _buildPagetest(context),
+        _buildPage(context),
       ]),
     );
   }

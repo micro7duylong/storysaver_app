@@ -1,147 +1,130 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:storysaver_app/models/image_modal.dart';
-import 'package:storysaver_app/screens/modal/create_note_modal.dart';
-import 'package:storysaver_app/screens/setting_screen.dart';
+import 'package:storysaver_app/screens/home_screen.dart';
+import 'package:storysaver_app/screens/modal/manage_note_modal.dart';
+import 'package:storysaver_app/screens/note_screen.dart';
+import 'package:storysaver_app/widgets/device_size.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    super.key,
-  });
+class SettingScreen extends StatefulWidget {
+  const SettingScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<SettingScreen> createState() => _SettingScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _SettingScreenState extends State<SettingScreen> {
   bool showListView = false;
   int _crossAxisCount = 2;
-
+  bool _selectAll = false;
   double _aspectRatio = 0.6;
-
   ViewType _viewType = ViewType.grid;
   List<ImageData> itemList = ImageData.getImageDataList();
-
-  void isListViewShown(bool value) {
-    setState(() {
-      showListView = value;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[900],
-        title: _buildTitle(),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.verified_outlined,
-              color: Colors.blue,
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.blue,
-            ),
+        leadingWidth: 90,
+        title: Center(child: Text('Notebook')),
+        leading: TextButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingScreen()),
-              );
+              setState(() {
+                _selectAll = !_selectAll;
+                itemList.forEach((imageData) {
+                  imageData.isFavorite = _selectAll;
+                });
+              });
             },
-          )
+            child: Text(
+              _selectAll ? 'Deselect all' : 'Select all',
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 12,
+                  fontWeight: FontWeight.normal),
+            )),
+        actions: <Widget>[
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Done',
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal),
+              )),
         ],
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
-      body: showListView
-          ? Column(children: [
-              _buildMenuBar(),
-              _buildListView(),
-            ]
-              // child: showListView ? _buildListView() : _buildEmptyBody(),
-              )
-          : Center(child: _buildEmptyBody()),
-      floatingActionButton: _FloatingActionButton(context),
+      body: Column(
+        children: [
+          _buildMenubar(),
+          _buildListView(),
+        ],
+      ),
     );
   }
 
-  Widget _buildTitle() {
-    return Text(
-      "Notebook",
-      style: TextStyle(
-          color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
-    );
-  }
-
-  Widget _buildMenuBar() {
+  Widget _buildMenubar() {
     return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey,
-            //   width: 3.0,
-          ),
-        ),
-      ),
-      margin: EdgeInsets.only(left: 5, right: 5),
       child: Row(
-        children: <Widget>[
-          const SizedBox(
-            width: 5,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.import_export),
+                color: Colors.blue,
+              ),
+              Text(
+                "Export",
+                style: TextStyle(color: Colors.blue, fontSize: 12),
+              )
+            ],
           ),
-          IconButton(
-            icon: Icon(
-                color: Colors.white,
-                _viewType == ViewType.list
-                    ? Icons.border_all_rounded
-                    : Icons.list),
-            onPressed: () {
-              if (_viewType == ViewType.list) {
-                _crossAxisCount = 2;
-                _aspectRatio = 0.6;
-                _viewType = ViewType.grid;
-              } else {
-                _crossAxisCount = 1;
-                _aspectRatio = (1 / .4);
-                _viewType = ViewType.list;
-              }
-              setState(() {});
-            },
+          Column(
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.copy,
+                ),
+                color: Colors.blue,
+              ),
+              Text(
+                "Duplicate",
+                style: TextStyle(color: Colors.blue, fontSize: 12),
+              )
+            ],
           ),
-          Expanded(
-              child: Container(margin: EdgeInsets.all(5), child: TextField())),
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.blue,
-            ),
-            onPressed: () {
-              // Handle button 4 press
-            },
+          Column(
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.notifications_none_outlined),
+                color: Colors.blue,
+              ),
+              Text(
+                "Reminder",
+                style: TextStyle(color: Colors.blue, fontSize: 12),
+              )
+            ],
           ),
-          IconButton(
-            icon: Icon(
-              Icons.calendar_month,
-              color: Colors.blue,
-            ),
-            onPressed: () {
-              // Handle button 5 press
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.short_text,
-              color: Colors.blue,
-            ),
-            onPressed: () {
-              // Handle button 6 press
-            },
-          ),
+          Column(
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.delete_forever_outlined),
+                color: Colors.red,
+              ),
+              Text(
+                "Delete",
+                style: TextStyle(color: Colors.red, fontSize: 12),
+              )
+            ],
+          )
         ],
       ),
     );
@@ -160,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisCount: _crossAxisCount,
             childAspectRatio: _aspectRatio,
             children: itemList.map((ImageData imageData) {
-              return getGridItem(imageData);
+              return getGridItem(imageData, _selectAll);
             }).toList(),
           ),
         ),
@@ -168,42 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildEmptyBody() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image(
-          image: AssetImage('assets/images/homenote_img.png'),
-          height: 150,
-          width: 150,
-        ),
-        Text(
-          "The Library is empty",
-          style: TextStyle(
-              color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal),
-        )
-      ],
-    );
-  }
-
-  Widget _FloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      shape: CircleBorder(),
-      onPressed: () {
-        setState(() {
-          showListView = !showListView;
-        });
-        CreateNoteModal.showCreateNote(context);
-      },
-      child: Image(
-        image: AssetImage('assets/images/notebook_logo.png'),
-        height: 30,
-        width: 30,
-      ),
-    );
-  }
-
-  GridTile getGridItem(ImageData imageData) {
+  GridTile getGridItem(ImageData imageData, bool selectAll) {
     return GridTile(
       child: (_viewType == ViewType.list)
           ? GestureDetector(
@@ -211,7 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Handle item tap event
               },
               child: Container(
-                margin: const EdgeInsets.only(top: 5, bottom: 10),
+                // margin: const EdgeInsets.only(top: 5, bottom: 10),
+                margin: const EdgeInsets.all(5),
                 child: Row(
                   children: [
                     ClipRRect(
@@ -259,8 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       icon: Icon(
                         imageData.isFavorite
-                            ? Icons.favorite_outlined
-                            : Icons.favorite,
+                            ? Icons.circle_rounded
+                            : Icons.circle_rounded,
                         color: imageData.isFavorite ? Colors.blue : Colors.grey,
                       ),
                       onPressed: () {
@@ -295,12 +244,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Positioned(
                               top: 5,
-                              right: 5,
+                              left: 5,
                               child: IconButton(
                                 icon: Icon(
                                   imageData.isFavorite
-                                      ? Icons.favorite
-                                      : Icons.favorite,
+                                      ? Icons.circle_rounded
+                                      : Icons.circle_rounded,
                                   color: imageData.isFavorite
                                       ? Colors.blue
                                       : Colors.grey,

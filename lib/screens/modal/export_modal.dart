@@ -6,9 +6,9 @@ import 'package:storysaver_app/screens/modal/manage_note_modal.dart';
 import 'package:storysaver_app/screens/note_screen.dart';
 import 'package:storysaver_app/widgets/device_size.dart';
 
-class CreateNoteModal extends StatefulWidget {
+class ExporModal extends StatefulWidget {
   @override
-  State<CreateNoteModal> createState() => _CreateNoteModalState();
+  State<ExporModal> createState() => _ExporModalState();
   static void showCreateNote(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -32,7 +32,7 @@ class CreateNoteModal extends StatefulWidget {
             ),
             child: Column(
               children: [
-                CreateNoteModal(),
+                ExporModal(),
               ],
             ),
           ),
@@ -42,7 +42,7 @@ class CreateNoteModal extends StatefulWidget {
   }
 }
 
-class _CreateNoteModalState extends State<CreateNoteModal> {
+class _ExporModalState extends State<ExporModal> {
   late String dropdownValue;
 
   SizeModal sizeModal = SizeModal();
