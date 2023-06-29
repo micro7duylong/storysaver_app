@@ -19,9 +19,12 @@ class _HomeScreenState extends State<HomeScreen> {
   int _crossAxisCount = 2;
 
   double _aspectRatio = 0.6;
+  bool isSearching = false;
+  String searchText = '';
 
   ViewType _viewType = ViewType.grid;
   List<ImageData> itemList = ImageData.getImageDataList();
+  List<ImageData> filteredItemList = [];
 
   void isListViewShown(bool value) {
     setState(() {
@@ -96,10 +99,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           IconButton(
             icon: Icon(
-                color: Colors.white,
-                _viewType == ViewType.list
-                    ? Icons.border_all_rounded
-                    : Icons.list),
+              _viewType == ViewType.list
+                  ? Icons.border_all_rounded
+                  : Icons.list,
+              color: Colors.white,
+            ),
             onPressed: () {
               if (_viewType == ViewType.list) {
                 _crossAxisCount = 2;
@@ -114,14 +118,37 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           Expanded(
-              child: Container(margin: EdgeInsets.all(5), child: TextField())),
+            child: isSearching
+                ? Container(
+                    margin: EdgeInsets.all(5),
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchText = value;
+                          filteredItemList = itemList.where((imageData) {
+                            return imageData.title
+                                .toLowerCase()
+                                .contains(searchText.toLowerCase());
+                          }).toList();
+                        });
+                      },
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                      ),
+                    ),
+                  )
+                : Container(),
+          ),
           IconButton(
             icon: Icon(
               Icons.search,
               color: Colors.blue,
             ),
             onPressed: () {
-              // Handle button 4 press
+              setState(() {
+                isSearching = !isSearching;
+              });
             },
           ),
           IconButton(
@@ -148,6 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildListView() {
+    List<ImageData> displayList =
+        searchText.isEmpty ? itemList : filteredItemList;
+
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(10),
@@ -159,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: GridView.count(
             crossAxisCount: _crossAxisCount,
             childAspectRatio: _aspectRatio,
-            children: itemList.map((ImageData imageData) {
+            children: displayList.map((ImageData imageData) {
               return getGridItem(imageData);
             }).toList(),
           ),
