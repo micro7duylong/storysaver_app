@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:storysaver_app/models/image_modal.dart';
 import 'package:storysaver_app/screens/home_screen.dart';
+import 'package:storysaver_app/screens/modal/export_modal.dart';
 import 'package:storysaver_app/screens/modal/manage_note_modal.dart';
 import 'package:storysaver_app/screens/note_screen.dart';
 import 'package:storysaver_app/widgets/device_size.dart';
@@ -14,6 +16,7 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+  bool _isShown = true;
   bool showListView = false;
   int _crossAxisCount = 2;
   bool _selectAll = false;
@@ -74,7 +77,9 @@ class _SettingScreenState extends State<SettingScreen> {
           Column(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  ExporModal.showExportModal(context);
+                },
                 icon: Icon(Icons.import_export),
                 color: Colors.blue,
               ),
@@ -115,7 +120,9 @@ class _SettingScreenState extends State<SettingScreen> {
           Column(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  _delete(context);
+                },
                 icon: Icon(Icons.delete_forever_outlined),
                 color: Colors.red,
               ),
@@ -128,6 +135,41 @@ class _SettingScreenState extends State<SettingScreen> {
         ],
       ),
     );
+  }
+
+  void _delete(BuildContext context) {
+    showCupertinoDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return CupertinoAlertDialog(
+            title: const Text('Are You Sure?'),
+            content: const Text(
+                'Are you sure you want to delete the note? this acction cannot be undone'),
+            actions: [
+              // The "Yes" button
+              CupertinoDialogAction(
+                onPressed: () {
+                  setState(() {
+                    _isShown = false;
+                    Navigator.of(context).pop();
+                  });
+                },
+                isDefaultAction: true,
+                isDestructiveAction: true,
+                child: const Text('Yes'),
+              ),
+              // The "No" button
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                isDefaultAction: false,
+                isDestructiveAction: false,
+                child: const Text('No'),
+              )
+            ],
+          );
+        });
   }
 
   Widget _buildListView() {

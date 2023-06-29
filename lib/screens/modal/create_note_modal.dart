@@ -81,7 +81,6 @@ class _CreateNoteModalState extends State<CreateNoteModal> {
   Widget _buildTopMenuBar(
     context,
   ) {
-    HomeScreen homeScreenInstance = HomeScreen();
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[900],
@@ -215,7 +214,6 @@ class _CreateNoteModalState extends State<CreateNoteModal> {
                 elevation: 16,
                 style: const TextStyle(color: Colors.white),
                 onChanged: (String? value) {
-                  // This is called when the user selects an item.
                   setState(() {
                     dropdownValue = value!;
                   });
