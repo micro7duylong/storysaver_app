@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:storysaver_app/models/image_modal.dart';
 import 'package:storysaver_app/screens/modal/create_note_modal.dart';
+import 'package:storysaver_app/screens/setting_screen.dart';
+import 'package:storysaver_app/widgets/test_calendar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -18,9 +20,13 @@ class _HomeScreenState extends State<HomeScreen> {
   int _crossAxisCount = 2;
 
   double _aspectRatio = 0.6;
+  bool isSearching = false;
+  bool hasResults = true;
+  String searchText = '';
 
   ViewType _viewType = ViewType.grid;
   List<ImageData> itemList = ImageData.getImageDataList();
+  List<ImageData> filteredItemList = [];
 
   void isListViewShown(bool value) {
     setState(() {
@@ -47,7 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Icons.settings,
               color: Colors.blue,
             ),
-            onPressed: () {},
+            onPressed: () {
+              _showSetting(context);
+            },
           )
         ],
         systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -90,10 +98,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           IconButton(
             icon: Icon(
-                color: Colors.white,
-                _viewType == ViewType.list
-                    ? Icons.border_all_rounded
-                    : Icons.list),
+              _viewType == ViewType.list
+                  ? Icons.border_all_rounded
+                  : Icons.list,
+              color: Colors.white,
+            ),
             onPressed: () {
               if (_viewType == ViewType.list) {
                 _crossAxisCount = 2;
@@ -107,14 +116,38 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {});
             },
           ),
-          Expanded(child: Container()),
+          Expanded(
+            child: isSearching
+                ? Container(
+                    margin: EdgeInsets.all(5),
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchText = value;
+                          filteredItemList = itemList.where((imageData) {
+                            return imageData.title
+                                .toLowerCase()
+                                .contains(searchText.toLowerCase());
+                          }).toList();
+                        });
+                      },
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                      ),
+                    ),
+                  )
+                : Container(),
+          ),
           IconButton(
             icon: Icon(
               Icons.search,
               color: Colors.blue,
             ),
             onPressed: () {
-              // Handle button 4 press
+              setState(() {
+                isSearching = !isSearching;
+              });
             },
           ),
           IconButton(
@@ -123,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.blue,
             ),
             onPressed: () {
-              // Handle button 5 press
+              _showCalendarModal(context);
             },
           ),
           IconButton(
@@ -132,10 +165,132 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.blue,
             ),
             onPressed: () {
-              // Handle button 6 press
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingScreen()),
+              );
             },
           ),
         ],
+      ),
+    );
+  }
+
+  void _showCalendarModal(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text('Reminder'),
+          ),
+          body: Column(
+            children: [
+              CalenderWidget(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showSetting(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoTheme(
+        data: CupertinoThemeData(
+          barBackgroundColor: Colors.grey[700],
+          textTheme: CupertinoTextThemeData(primaryColor: Colors.white),
+        ),
+        child: CupertinoActionSheet(
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.notifications_none_outlined),
+                    Text('Reminder'),
+                    Spacer(),
+                    Text('None'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.edit),
+                    const Text('Rename'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.copy),
+                    const Text('Duplicate'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  children: [
+                    Icon(Icons.import_export),
+                    const Text('Export'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  children: [
+                    Icon(Icons.delete_forever),
+                    const Text(
+                      'Delete',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Done'),
+          ),
+        ),
       ),
     );
   }
@@ -152,9 +307,15 @@ class _HomeScreenState extends State<HomeScreen> {
           child: GridView.count(
             crossAxisCount: _crossAxisCount,
             childAspectRatio: _aspectRatio,
-            children: itemList.map((ImageData imageData) {
-              return getGridItem(imageData);
-            }).toList(),
+            children: isSearching
+                ? filteredItemList.length > 0
+                    ? filteredItemList.map((ImageData imageData) {
+                        return getGridItem(imageData);
+                      }).toList()
+                    : [Text('No results is found')]
+                : itemList.map((ImageData imageData) {
+                    return getGridItem(imageData);
+                  }).toList(),
           ),
         ),
       ),
@@ -180,18 +341,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _FloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      shape: CircleBorder(),
-      onPressed: () {
-        setState(() {
-          showListView = !showListView;
-        });
-        CreateNoteSlideUp.showCreateNote(context);
-      },
-      child: Image(
-        image: AssetImage('assets/images/notebook_logo.png'),
-        height: 30,
-        width: 30,
+    return Visibility(
+      visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+      child: FloatingActionButton(
+        shape: CircleBorder(),
+        onPressed: () {
+          setState(() {
+            showListView = !showListView;
+          });
+          CreateNoteModal.showCreateNote(context);
+        },
+        child: Image(
+          image: AssetImage('assets/images/notebook_logo.png'),
+          height: 30,
+          width: 30,
+        ),
       ),
     );
   }
@@ -212,10 +376,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Container(
                           width: 100,
                           height: 150,
-                          child: Image.network(
-                            fit: BoxFit.cover,
+                          child: Image.asset(
                             imageData.path,
+                            fit: BoxFit.cover,
                           ),
+                          // child: Image.network(
+                          //   fit: BoxFit.cover,
+                          //   imageData.path,
+                          // ),
                         )),
                     const SizedBox(
                       width: 5,
@@ -273,7 +441,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             SizedBox(
                               width: 150,
-                              child: Image.network(
+                              // child: Image.network(
+                              //   imageData.path,
+                              //   fit: BoxFit.cover,
+                              // ),
+                              child: Image.asset(
                                 imageData.path,
                                 fit: BoxFit.cover,
                               ),
@@ -285,10 +457,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 icon: Icon(
                                   imageData.isFavorite
                                       ? Icons.favorite
-                                      : Icons.favorite_border,
+                                      : Icons.favorite,
                                   color: imageData.isFavorite
                                       ? Colors.blue
-                                      : Colors.white,
+                                      : Colors.grey,
                                 ),
                                 onPressed: () {
                                   setState(() {

@@ -6,11 +6,10 @@ import 'package:storysaver_app/screens/modal/manage_note_modal.dart';
 import 'package:storysaver_app/screens/note_screen.dart';
 import 'package:storysaver_app/widgets/device_size.dart';
 
-class CreateNoteSlideUp extends StatefulWidget {
+class CreateNoteModal extends StatefulWidget {
   @override
-  State<CreateNoteSlideUp> createState() => _CreateNoteSlideUpState();
-  static void showCreateNote(
-      BuildContext context) {
+  State<CreateNoteModal> createState() => _CreateNoteModalState();
+  static void showCreateNote(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -33,7 +32,7 @@ class CreateNoteSlideUp extends StatefulWidget {
             ),
             child: Column(
               children: [
-                CreateNoteSlideUp(),
+                CreateNoteModal(),
               ],
             ),
           ),
@@ -43,7 +42,7 @@ class CreateNoteSlideUp extends StatefulWidget {
   }
 }
 
-class _CreateNoteSlideUpState extends State<CreateNoteSlideUp> {
+class _CreateNoteModalState extends State<CreateNoteModal> {
   late String dropdownValue;
 
   SizeModal sizeModal = SizeModal();
@@ -82,7 +81,6 @@ class _CreateNoteSlideUpState extends State<CreateNoteSlideUp> {
   Widget _buildTopMenuBar(
     context,
   ) {
-    HomeScreen homeScreenInstance = HomeScreen();
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[900],
@@ -120,7 +118,6 @@ class _CreateNoteSlideUpState extends State<CreateNoteSlideUp> {
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => NotesScreen()));
-                 
                 },
                 child: Text(
                   'Create',
@@ -137,7 +134,6 @@ class _CreateNoteSlideUpState extends State<CreateNoteSlideUp> {
 
   void showCreateNote(context) {
     showModalBottomSheet(
-      
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
@@ -218,7 +214,6 @@ class _CreateNoteSlideUpState extends State<CreateNoteSlideUp> {
                 elevation: 16,
                 style: const TextStyle(color: Colors.white),
                 onChanged: (String? value) {
-                  // This is called when the user selects an item.
                   setState(() {
                     dropdownValue = value!;
                   });
@@ -517,10 +512,14 @@ class _CoverListWidgetState extends State<CoverListWidget> {
                         Container(
                           margin: EdgeInsets.all(5),
                           height: 120,
-                          child: Image.network(
+                          child: Image.asset(
                             imageUrl,
                             fit: BoxFit.cover,
                           ),
+                          // child: Image.network(
+                          //   imageUrl,
+                          //   fit: BoxFit.cover,
+                          //),
                         ),
                         // SizedBox(height: 10),
                         Text(
@@ -635,10 +634,14 @@ class _PageListWidgetState extends State<PageListWidget> {
                           margin: EdgeInsets.all(5),
                           decoration: BoxDecoration(),
                           height: 110,
-                          child: Image.network(
+                          child: Image.asset(
                             imageUrl,
                             fit: BoxFit.cover,
                           ),
+                          // child: Image.network(
+                          //   imageUrl,
+                          //   fit: BoxFit.cover,
+                          // ),
                         ),
                         //  SizedBox(height: 5),
                         Text(
