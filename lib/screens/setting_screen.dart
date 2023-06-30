@@ -15,6 +15,7 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   bool _isShown = true;
+  bool enable = false;
   bool showListView = false;
   int _crossAxisCount = 2;
   bool _selectAll = false;
@@ -166,13 +167,17 @@ class _SettingScreenState extends State<SettingScreen> {
 
   Widget _buildEnableOption() {
     double screenWidth = DeviceSize.width(context);
-    bool enable = true;
+    //bool enable = true;
 
     return Container(
       width: screenWidth,
       margin: EdgeInsets.all(5),
       child: Row(
         children: [
+          Icon(
+            Icons.notifications,
+            color: Colors.blue,
+          ),
           Text('Enable',
               style: TextStyle(
                 color: Colors.white,
@@ -307,7 +312,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       icon: Icon(
                         imageData.isFavorite
                             ? Icons.circle_rounded
-                            : Icons.circle_rounded,
+                            : Icons.check_circle,
                         color: imageData.isFavorite ? Colors.blue : Colors.grey,
                       ),
                       onPressed: () {
