@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:storysaver_app/models/image_modal.dart';
 import 'package:storysaver_app/screens/modal/create_note_modal.dart';
 import 'package:storysaver_app/screens/setting_screen.dart';
+import 'package:storysaver_app/widgets/test_calendar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -155,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.blue,
             ),
             onPressed: () {
-              // Handle button 5 press
+              _showCalendarModal(context);
             },
           ),
           IconButton(
@@ -171,6 +172,24 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  void _showCalendarModal(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text('Reminder'),
+          ),
+          body: Column(
+            children: [
+              CalenderWidget(),
+            ],
+          ),
+        ),
       ),
     );
   }
