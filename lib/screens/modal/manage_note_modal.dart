@@ -131,7 +131,11 @@ class _ManageNoteState extends State<ManageNote> {
               return Container(
                 width: 100,
                 margin: EdgeInsets.all(8),
-                child: Image.network(
+                // child: Image.network(
+                //   pageModal.fetchedPageData[index],
+                //   fit: BoxFit.cover,
+                // ),
+                child: Image.asset(
                   pageModal.fetchedPageData[index],
                   fit: BoxFit.cover,
                 ),
@@ -261,4 +265,5 @@ class _ManageNoteState extends State<ManageNote> {
       ),
     );
   }
+   
 }
