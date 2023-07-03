@@ -1,9 +1,10 @@
+import 'package:com.qksoft.storysaverfacebook/models/image_modal.dart';
+import 'package:com.qksoft.storysaverfacebook/screens/modal/export_modal.dart';
+import 'package:com.qksoft.storysaverfacebook/widgets/device_size.dart';
+import 'package:com.qksoft.storysaverfacebook/widgets/test_calendar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:storysaver_app/models/image_modal.dart';
-import 'package:storysaver_app/screens/modal/export_modal.dart';
-import 'package:storysaver_app/widgets/test_calendar.dart';
-import 'package:storysaver_app/widgets/device_size.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 
 class SettingScreen extends StatefulWidget {

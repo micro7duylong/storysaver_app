@@ -1,12 +1,7 @@
+import 'package:com.qksoft.storysaverfacebook/screens/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:storysaver_app/models/img_data_provider.dart';
-import 'package:storysaver_app/models/slected_image.dart';
 
-import 'package:storysaver_app/screens/home_screen.dart';
-import 'package:storysaver_app/screens/note_screen.dart';
-import 'package:storysaver_app/screens/splash_screen.dart';
 
 void main() {
   runApp(

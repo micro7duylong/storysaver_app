@@ -1,11 +1,12 @@
+import 'package:com.qksoft.storysaverfacebook/models/image_modal.dart';
+import 'package:com.qksoft.storysaverfacebook/screens/modal/create_note_modal.dart';
+import 'package:com.qksoft.storysaverfacebook/screens/modal/manage_note_modal.dart';
+import 'package:com.qksoft.storysaverfacebook/widgets/device_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:popover/popover.dart';
-import 'package:storysaver_app/models/image_modal.dart';
-import 'package:storysaver_app/screens/modal/create_note_modal.dart';
-import 'package:storysaver_app/screens/modal/manage_note_modal.dart';
-import 'package:storysaver_app/widgets/device_size.dart';
+
 
 class NotesScreen extends StatefulWidget {
   @override
