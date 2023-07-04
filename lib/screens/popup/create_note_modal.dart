@@ -1,5 +1,5 @@
 import 'package:com.qksoft.storysaverfacebook/models/image_modal.dart';
-import 'package:com.qksoft.storysaverfacebook/screens/modal/manage_note_modal.dart';
+import 'package:com.qksoft.storysaverfacebook/screens/popup/manage_note_modal.dart';
 import 'package:com.qksoft.storysaverfacebook/screens/note_screen.dart';
 import 'package:com.qksoft.storysaverfacebook/widgets/device_size.dart';
 import 'package:flutter/material.dart';

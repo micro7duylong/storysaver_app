@@ -1,5 +1,5 @@
 import 'package:com.qksoft.storysaverfacebook/models/image_modal.dart';
-import 'package:com.qksoft.storysaverfacebook/screens/modal/create_note_modal.dart';
+import 'package:com.qksoft.storysaverfacebook/screens/popup/create_note_modal.dart';
 import 'package:com.qksoft.storysaverfacebook/screens/setting_screen.dart';
 import 'package:com.qksoft.storysaverfacebook/widgets/test_calendar.dart';
 import 'package:flutter/cupertino.dart';
