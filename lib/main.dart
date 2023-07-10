@@ -1,23 +1,20 @@
+import 'package:com.qksoft.storysaverfacebook/models/product.dart';
 import 'package:com.qksoft.storysaverfacebook/screens/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(ProductAdapter());
   runApp(
     MyApp(),
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
