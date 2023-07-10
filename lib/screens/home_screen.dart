@@ -1,6 +1,8 @@
 import 'package:com.qksoft.storysaverfacebook/models/image_modal.dart';
 import 'package:com.qksoft.storysaverfacebook/purchase_page/purchase_page.dart';
 import 'package:com.qksoft.storysaverfacebook/purchase_page/purchase_page_v2.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_page/purchase_page_v3.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_page/example_purchase.dart';
 import 'package:com.qksoft.storysaverfacebook/screens/popup/create_note_modal.dart';
 import 'package:com.qksoft.storysaverfacebook/screens/setting_screen.dart';
 import 'package:com.qksoft.storysaverfacebook/widgets/test_calendar.dart';
@@ -228,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const PurchasePageV2()));
+                        builder: (context) => const PurchasePageExam()));
               },
               child: Container(
                 margin: EdgeInsets.all(5),
@@ -236,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(Icons.workspace_premium_outlined),
-                    const Text('Get Permium'),
+                    const Text('Get Premium'),
                   ],
                 ),
               ),

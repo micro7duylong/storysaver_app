@@ -15,7 +15,9 @@ import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
 import 'package:page_transition/page_transition.dart';
 
-const String _weekId = ' ';
+
+
+const String _weekId = 'remove_ads_weekly';
 const String _monthId = 'remove_ads_monthly';
 const String _yearId = 'remove_ads_yearly';
 const List<String> _kProductIds = <String>[
@@ -89,9 +91,7 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
       });
     } else {
       EasyLoading.dismiss();
-      EasyLoading.showInfo(
-        'Sorry can\'t purchase now',
-      );
+      EasyLoading.showInfo('Sorry can\'t purchase now',);
     }
   }
 
@@ -107,9 +107,7 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
       purchaseParam: purchaseParam,
     )
         .catchError((error) {
-      EasyLoading.showError(
-        'Can\'t purchase',
-      );
+      EasyLoading.showError('Can\'t purchase',);
       return true;
     });
   }
@@ -126,9 +124,7 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
       List<PurchaseDetails> purchaseDetailsList) async {
     EasyLoading.dismiss();
     if (purchaseDetailsList.isEmpty) {
-      EasyLoading.showInfo(
-        'No past purchase',
-      );
+      EasyLoading.showInfo( 'No past purchase',);
     }
     purchaseDetailsList.sort((pc1, pc2) =>
         int.parse(pc1.transactionDate.toString()) >=
@@ -155,9 +151,7 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
             )),
             productID: purchaseDetails.productID,
           ));
-          EasyLoading.showSuccess(
-            'You are Premium',
-          );
+          EasyLoading.showSuccess('You are Premium',);
           break;
         case PurchaseStatus.restored:
           await locator<AppDatabase>().setPastProduct(Product(
@@ -174,9 +168,7 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
             productID: purchaseDetails.productID,
           ));
 
-          EasyLoading.showSuccess(
-            'Restored your plan',
-          );
+          EasyLoading.showSuccess( 'Restored your plan',);
           break;
         case PurchaseStatus.error:
           if (EasyLoading.isShow) {
@@ -210,12 +202,11 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
   Widget build(BuildContext context) {
     return _products.isEmpty
         ? Container(
-            color: Colors.blue[300],
+            color:Colors.blue[300],
             child: Center(
-              child: Text(
-                'Something wrong',
-                style: TextStyle(fontSize: 14, color: Colors.white),
-              ),
+              child: Text('Something wrong',
+                  style:
+                       TextStyle(fontSize: 14, color: Colors.white),),
             ))
         : Scaffold(
             backgroundColor: Colors.blue[300],
@@ -242,28 +233,26 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Join Premium Plan',
-                    style: TextStyle(fontSize: 14, color: Colors.white),
+                   'Join Premium Plan',
+                    style:
+                        TextStyle(fontSize: 14, color: Colors.white),
                   ),
                   const SizedBox(
                     height: 44,
                   ),
-                  Supcription(
-                    title: 'Unlock Note Premium',
-                  ),
+                  Supcription( title: 'Unlock Note Premium',),
                   const SizedBox(
                     height: 20,
                   ),
-                  Supcription(
-                    title: 'No ads',
-                  ),
+                  Supcription( title: 'No ads',),
                   const SizedBox(
                     height: 44,
                   ),
                   Center(
                     child: Text(
-                      '${'3 days free trial, renews at'} ${_products.firstWhere((element) => element.id == _kProductIds[selectedIndex]).price}/${selectedIndex == 0 ? 'week' : selectedIndex == 1 ? 'month' : 'year'}',
-                      style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+                      '${ '3 days free trial, renews at'} ${_products.firstWhere((element) => element.id == _kProductIds[selectedIndex]).price}/${selectedIndex == 0 ? 'week' : selectedIndex == 1 ? 'month' : 'year'}',
+                      style:
+                        TextStyle(fontSize: 14, color: Colors.blueGrey),
                     ),
                   ),
                   const SizedBox(
@@ -303,9 +292,7 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
                     Product? product = locator<AppDatabase>().getPastProduct();
                     if (product != null &&
                         product.expireDate.isAfter(DateTime.now())) {
-                      EasyLoading.showInfo(
-                        'You are Premium. Can\'t purchase',
-                      );
+                      EasyLoading.showInfo('You are Premium. Can\'t purchase',);
                       return;
                     }
                     await _subscribe(
@@ -316,8 +303,9 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
                     height: 30,
                   ),
                   Text(
-                    'Payment will be charged to iTunes Account at confirmation of purchase. To ensure uninterrupted service, all subscriptions are renewed automatically unless auto-renew is turned off at least 24-hours before the end of the current period. The account is charged for renewal within 24-hours before the end of the current period. Users can manage and cancel subscriptions in their account settings on the App Store. Please note that when your purchase a subscription, the sale is final, and we will not provide a refund. Your purchase will be subject to Apple\'s applicable payment policy, which also may not provide for refunds.',
-                    style: TextStyle(fontSize: 11, color: Colors.blueGrey),
+                   'Payment will be charged to iTunes Account at confirmation of purchase. To ensure uninterrupted service, all subscriptions are renewed automatically unless auto-renew is turned off at least 24-hours before the end of the current period. The account is charged for renewal within 24-hours before the end of the current period. Users can manage and cancel subscriptions in their account settings on the App Store. Please note that when your purchase a subscription, the sale is final, and we will not provide a refund. Your purchase will be subject to Apple\'s applicable payment policy, which also may not provide for refunds.',
+                     style:
+                        TextStyle(fontSize: 11, color: Colors.blueGrey),
                   ),
                   const SizedBox(
                     height: 20,
@@ -337,16 +325,14 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
                       //   },
                       //   child: Text(
                       //      'Term of Use',style:   TextStyle(fontSize: 14, color: Colors.white, decoration: TextDecoration.underline),,
-
+                         
                       //   ),
                       // ),
                       GestureDetector(
                           child: Text(
-                            'Restore',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                decoration: TextDecoration.underline),
+                             'Restore',
+                             style:
+                        TextStyle(fontSize: 14, color: Colors.white, decoration: TextDecoration.underline),
                           ),
                           onTap: () async {
                             EasyLoading.show();
@@ -355,9 +341,8 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
                                 .catchError((e) {
                               if (e is SKError) {
                                 EasyLoading.showInfo(
-                                  e.userInfo['NSLocalizedDescription'] ??
-                                      'Something error',
-                                );
+                                    e.userInfo['NSLocalizedDescription'] ??
+                                        'Something error',);
                               }
                             });
 
