@@ -1,4 +1,4 @@
-package com.qksoft.storysaverfacebok
+package com.qksoft.storysaverfacebook
 
 import io.flutter.embedding.android.FlutterActivity
 

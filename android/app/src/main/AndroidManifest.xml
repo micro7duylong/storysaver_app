@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"  package="com.qksoft.storysaverfacebok">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"  package="com.qksoft.storysaverfacebook">
+ <uses-permission android:name="com.android.vending.BILLING" />
     <application
         android:label="story saver"
         android:name="${applicationName}"

@@ -1,11 +1,12 @@
 import 'package:com.qksoft.storysaverfacebook/models/image_modal.dart';
-import 'package:com.qksoft.storysaverfacebook/screens/modal/create_note_modal.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_module/purchase_page_v2.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_module/example_purchase.dart';
+import 'package:com.qksoft.storysaverfacebook/screens/popup/create_note_modal.dart';
 import 'package:com.qksoft.storysaverfacebook/screens/setting_screen.dart';
 import 'package:com.qksoft.storysaverfacebook/widgets/test_calendar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -218,6 +219,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text('Reminder'),
                     Spacer(),
                     Text('None'),
+                  ],
+                ),
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                /// move to purchase srceen
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PurchasePageV2()));
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.workspace_premium_outlined),
+                    const Text('Get Premium'),
                   ],
                 ),
               ),

@@ -1,9 +1,21 @@
+import 'package:com.qksoft.storysaverfacebook/models/product.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_module/locator/locator.dart';
 import 'package:com.qksoft.storysaverfacebook/screens/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
+  //Hive
+  await Hive.initFlutter();
+  Hive.registerAdapter(ProductAdapter());
+  await Hive.openBox<Product>('product');
+
+  //DI
+  await setupGetIt();
+
   runApp(
     MyApp(),
   );
@@ -12,7 +24,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
