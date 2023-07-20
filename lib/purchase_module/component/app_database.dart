@@ -6,16 +6,8 @@ class AppDatabase {
   late final Box<Product> product;
 
   static Future<AppDatabase> instance() async {
-    await Hive.initFlutter();
-
-    final directory = await getApplicationDocumentsDirectory();
-    Hive.init(directory.path);
-
-    Hive.registerAdapter(ProductAdapter());
-
-    final productBox = await Hive.openBox<Product>('product');
-
-    return AppDatabase._(productBox);
+    final Box<Product> pd = Hive.box('product');
+    return AppDatabase._(pd);
   }
 
   AppDatabase._(this.product);

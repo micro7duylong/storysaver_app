@@ -1,0 +1,57 @@
+Index: lib/main.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart	(revision cf715a6cced1469f1b5d8600365c0bfeac72eabc)
++++ b/lib/main.dart	(revision 2309e04d4247a6b866512878633d4975582b4784)
+@@ -1,12 +1,21 @@
+ import 'package:com.qksoft.storysaverfacebook/models/product.dart';
++import 'package:com.qksoft.storysaverfacebook/purchase_module/locator/locator.dart';
+ import 'package:com.qksoft.storysaverfacebook/screens/splash_screen.dart';
+ import 'package:flutter/cupertino.dart';
+ import 'package:flutter/material.dart';
+ import 'package:hive_flutter/hive_flutter.dart';
+ 
+ void main() async {
++  WidgetsFlutterBinding.ensureInitialized();
++
++  //Hive
+   await Hive.initFlutter();
+   Hive.registerAdapter(ProductAdapter());
++  await Hive.openBox<Product>('product');
++
++  //DI
++  await setupGetIt();
++
+   runApp(
+     MyApp(),
+   );
+Index: lib/purchase_module/component/app_database.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/purchase_module/component/app_database.dart b/lib/purchase_module/component/app_database.dart
+--- a/lib/purchase_module/component/app_database.dart	(revision cf715a6cced1469f1b5d8600365c0bfeac72eabc)
++++ b/lib/purchase_module/component/app_database.dart	(revision 2309e04d4247a6b866512878633d4975582b4784)
+@@ -6,16 +6,8 @@
+   late final Box<Product> product;
+ 
+   static Future<AppDatabase> instance() async {
+-    await Hive.initFlutter();
+-
+-    final directory = await getApplicationDocumentsDirectory();
+-    Hive.init(directory.path);
+-
+-    Hive.registerAdapter(ProductAdapter());
+-
+-    final productBox = await Hive.openBox<Product>('product');
+-
+-    return AppDatabase._(productBox);
++    final Box<Product> pd = Hive.box('product');
++    return AppDatabase._(pd);
+   }
+ 
+   AppDatabase._(this.product);
