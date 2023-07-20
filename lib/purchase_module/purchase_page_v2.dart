@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:com.qksoft.storysaverfacebook/models/product.dart';
-import 'package:com.qksoft.storysaverfacebook/purchase_page/consumable_store.dart';
-import 'package:com.qksoft.storysaverfacebook/purchase_page/widget/purchase_button.dart';
-import 'package:com.qksoft.storysaverfacebook/purchase_page/widget/purchase_case_item.dart';
-import 'package:com.qksoft.storysaverfacebook/util/component/app_database.dart';
-import 'package:com.qksoft.storysaverfacebook/util/component/locator/locator.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_module/consumable_store.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_module/widget/purchase_button.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_module/widget/purchase_case_item.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_module/component/app_database.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_module/locator/locator.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -21,21 +21,34 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 const String _weekId = 'remove_ads_weekly';
 const String _monthId = 'remove_ads_monthly';
 const String _yearId = 'remove_ads_yearly';
-
+// const String _sub_01 = 'qksoft_sub_01';
+// const String _sub_02 = 'qksoft_sub_02';
+// const String _sub_03 = 'qksoft_sub_03';
+// const String _sub_04 = 'qksoft_sub_04';
+// const String _sub_05 = 'qksoft_sub_05';
+// const String _sub_06 = 'qksoft_sub_06';
+// const String _sub_07 = 'qksoft_sub_07';
 const List<String> _kProductIds = <String>[
   _weekId,
   // _monthId,
   // _yearId
+  // _sub_01,
+  // _sub_02,
+  // _sub_03,
+  // _sub_04,
+  // _sub_05,
+  // _sub_06,
+  // _sub_07,
 ];
 
-class PurchasePageV3 extends StatefulWidget {
-  const PurchasePageV3({super.key});
+class PurchasePageV2 extends StatefulWidget {
+  const PurchasePageV2({super.key});
 
   @override
-  State<PurchasePageV3> createState() => _PurchasePageV3State();
+  State<PurchasePageV2> createState() => _PurchasePageV2State();
 }
 
-class _PurchasePageV3State extends State<PurchasePageV3> {
+class _PurchasePageV2State extends State<PurchasePageV2> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
   List<String> _notFoundIds = <String>[];
@@ -167,11 +180,10 @@ class _PurchasePageV3State extends State<PurchasePageV3> {
             const SizedBox(
               height: 30,
             ),
-             Text(
-                   'Payment will be charged to iTunes Account at confirmation of purchase. To ensure uninterrupted service, all subscriptions are renewed automatically unless auto-renew is turned off at least 24-hours before the end of the current period. The account is charged for renewal within 24-hours before the end of the current period. Users can manage and cancel subscriptions in their account settings on the App Store. Please note that when your purchase a subscription, the sale is final, and we will not provide a refund. Your purchase will be subject to Apple\'s applicable payment policy, which also may not provide for refunds.',
-                     style:
-                        TextStyle(fontSize: 11, color: Colors.blueGrey),
-                  ),
+            Text(
+              'Payment will be charged to iTunes Account at confirmation of purchase. To ensure uninterrupted service, all subscriptions are renewed automatically unless auto-renew is turned off at least 24-hours before the end of the current period. The account is charged for renewal within 24-hours before the end of the current period. Users can manage and cancel subscriptions in their account settings on the App Store. Please note that when your purchase a subscription, the sale is final, and we will not provide a refund. Your purchase will be subject to Apple\'s applicable payment policy, which also may not provide for refunds.',
+              style: TextStyle(fontSize: 11, color: Colors.blueGrey),
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -303,7 +315,9 @@ class _PurchasePageV3State extends State<PurchasePageV3> {
             )),
             productID: purchaseDetails.productID,
           ));
-          EasyLoading.showSuccess( 'You are Premium. Can\'t purchase',);
+          EasyLoading.showSuccess(
+            'You are Premium. Can\'t purchase',
+          );
           break;
         case PurchaseStatus.error:
           if (EasyLoading.isShow) {
@@ -325,7 +339,9 @@ class _PurchasePageV3State extends State<PurchasePageV3> {
             )),
             productID: purchaseDetails.productID,
           ));
-          EasyLoading.showSuccess( 'Restored your plan',);
+          EasyLoading.showSuccess(
+            'Restored your plan',
+          );
           break;
         case PurchaseStatus.canceled:
           // TODO: Handle this case.
@@ -373,7 +389,9 @@ class _PurchasePageV3State extends State<PurchasePageV3> {
 
     Product? product = locator<AppDatabase>().getPastProduct();
     if (product != null && product.expireDate.isAfter(DateTime.now())) {
-      EasyLoading.showInfo('You are Premium. Can\'t purchase',);
+      EasyLoading.showInfo(
+        'You are Premium. Can\'t purchase',
+      );
       return;
     }
 
@@ -401,7 +419,9 @@ class _PurchasePageV3State extends State<PurchasePageV3> {
     await _inAppPurchase
         .buyNonConsumable(purchaseParam: purchaseParam)
         .catchError((error) {
-      EasyLoading.showError( 'Can\'t purchase',);
+      EasyLoading.showError(
+        'Can\'t purchase',
+      );
       return true;
     });
   }
@@ -421,7 +441,8 @@ class _PurchasePageV3State extends State<PurchasePageV3> {
     await _inAppPurchase.restorePurchases().catchError((e) {
       if (e is SKError) {
         EasyLoading.showInfo(
-            e.userInfo['NSLocalizedDescription'] ?? 'Something wrong',);
+          e.userInfo['NSLocalizedDescription'] ?? 'Something wrong',
+        );
       }
     });
     EasyLoading.dismiss();

@@ -1,6 +1,6 @@
 
 
-import 'package:com.qksoft.storysaverfacebook/util/component/app_database.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_module/component/app_database.dart';
 import 'package:get_it/get_it.dart';
 
 GetIt locator = GetIt.instance;
