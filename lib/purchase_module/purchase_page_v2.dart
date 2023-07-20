@@ -21,24 +21,17 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 const String _weekId = 'remove_ads_weekly';
 const String _monthId = 'remove_ads_monthly';
 const String _yearId = 'remove_ads_yearly';
-// const String _sub_01 = 'qksoft_sub_01';
-// const String _sub_02 = 'qksoft_sub_02';
-// const String _sub_03 = 'qksoft_sub_03';
-// const String _sub_04 = 'qksoft_sub_04';
-// const String _sub_05 = 'qksoft_sub_05';
-// const String _sub_06 = 'qksoft_sub_06';
-// const String _sub_07 = 'qksoft_sub_07';
 const List<String> _kProductIds = <String>[
   _weekId,
-  // _monthId,
-  // _yearId
-  // _sub_01,
-  // _sub_02,
-  // _sub_03,
-  // _sub_04,
-  // _sub_05,
-  // _sub_06,
-  // _sub_07,
+  _monthId,
+  _yearId,
+  'qksoft_sub_01',
+  'qksoft_sub_02',
+  'qksoft_sub_03',
+  'qksoft_sub_04',
+  'qksoft_sub_05',
+  'qksoft_sub_06',
+  'qksoft_sub_07',
 ];
 
 class PurchasePageV2 extends StatefulWidget {
