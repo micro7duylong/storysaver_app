@@ -7,15 +7,13 @@ import 'package:com.qksoft.storysaverfacebook/purchase_module/widget/purchase_bu
 import 'package:com.qksoft.storysaverfacebook/purchase_module/widget/purchase_case_item.dart';
 import 'package:com.qksoft.storysaverfacebook/purchase_module/component/app_database.dart';
 import 'package:com.qksoft.storysaverfacebook/purchase_module/locator/locator.dart';
+import 'package:com.qksoft.storysaverfacebook/purchase_module/widget/supcription_item.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
-import 'package:page_transition/page_transition.dart';
-
-import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
 const String _weekId = 'remove_ads_weekly';
@@ -44,13 +42,8 @@ class PurchasePageV2 extends StatefulWidget {
 class _PurchasePageV2State extends State<PurchasePageV2> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
-  List<String> _notFoundIds = <String>[];
   List<ProductDetails> _products = <ProductDetails>[];
   List<PurchaseDetails> _purchases = <PurchaseDetails>[];
-  List<String> _consumables = <String>[];
-  bool _isAvailable = false;
-  bool _purchasePending = false;
-  bool _loading = true;
   String? _queryProductError;
   String? _selectedProductId;
 
@@ -87,7 +80,7 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
 
     if (isError) {
       return Container(
-        color: Colors.white,
+        color: Colors.blueGrey,
         child: Center(
           child: Text(
             'Something wrong',
@@ -104,19 +97,22 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
         height: 20,
       ));
     } else {
-      productList.addAll(_products.mapIndexed((index, product) =>
-          PurchaseCaseItem(
+      productList.addAll(
+        _products.mapIndexed(
+          (index, product) => PurchaseCaseItem(
               value: product.price,
               duration: product.parseDuration(),
-              onPressed: () => setSelectedProductId(product.id),
-              isSelected: _selectedProductId == product.id)));
+              onPressed: () => handlePurchaseButtonAsync(product),
+              isSelected: _selectedProductId == product.id),
+        ),
+      );
     }
 
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Colors.grey[900],
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           GestureDetector(
@@ -125,7 +121,7 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
             },
             child: Padding(
               padding: const EdgeInsets.all(16).copyWith(bottom: 0),
-              child: Icon(Icons.close),
+              child: Icon(Icons.arrow_back_ios),
             ),
           )
         ],
@@ -139,18 +135,26 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
           children: [
             Text(
               'Join Premium Plan',
-              style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+              style: TextStyle(fontSize: 30, color: Colors.green),
             ),
             const SizedBox(
-              height: 44,
+              height: 24,
             ),
             // Supcription(svgPath: SvgPath.unlock, title: S.current.unlock),
             const SizedBox(
               height: 20,
             ),
-            //  Supcription(svgPath: SvgPath.sub3, title: S.current.noAds),
+            Row(
+              children: [
+                Icon(
+                  Icons.remove_circle_outline,
+                  color: Colors.red,
+                ),
+                Supcription(title: "Remove ads"),
+              ],
+            ),
             const SizedBox(
-              height: 44,
+              height: 24,
             ),
             Center(
               child: Text(
@@ -167,9 +171,6 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
             const SizedBox(
               height: 10,
             ),
-            PurchaseButton(
-              onPressed: handlePurchaseButtonAsync,
-            ),
             const SizedBox(
               height: 30,
             ),
@@ -183,32 +184,16 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                // GestureDetector(
-                //   onTap: handleTermButton,
-                //   child: Text(
-                //     S.current.term,
-                //     style: AppTextStyle.regular13.copyWith(
-                //         color: AppColor.white,
-                //         decoration: TextDecoration.underline),
-                //   ),
-                // ),
-                // GestureDetector(
-                //   onTap: handleRestoreButtonAsync,
-                //   child: Text(
-                //     S.current.restore,
-                //     style: AppTextStyle.regular13.copyWith(
-                //         color: AppColor.white,
-                //         decoration: TextDecoration.underline),
-                //   ),
-                // ),
-                // GestureDetector(
-                //   onTap: handlePrivacyPolicyButton,
-                //   child: Text(
-                //      'Privacy Policy',
-                //     style:
-                //        TextStyle(fontSize: 14, color: Colors.white),
-                //   ),
-                // )
+                GestureDetector(
+                  onTap: handleRestoreButtonAsync,
+                  child: Text(
+                    'Restore',
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.blueGrey,
+                        decoration: TextDecoration.underline),
+                  ),
+                ),
               ],
             ),
             const SizedBox(
@@ -224,13 +209,8 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
     final bool isAvailable = await _inAppPurchase.isAvailable();
     if (!isAvailable) {
       setState(() {
-        _isAvailable = isAvailable;
         _products = <ProductDetails>[];
         _purchases = <PurchaseDetails>[];
-        _notFoundIds = <String>[];
-        _consumables = <String>[];
-        _purchasePending = false;
-        _loading = false;
       });
       return;
     }
@@ -247,13 +227,8 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
     if (productDetailResponse.error != null) {
       setState(() {
         _queryProductError = productDetailResponse.error?.message;
-        _isAvailable = isAvailable;
         _products = productDetailResponse.productDetails;
         _purchases = <PurchaseDetails>[];
-        _notFoundIds = productDetailResponse.notFoundIDs;
-        _consumables = <String>[];
-        _purchasePending = false;
-        _loading = false;
         _selectedProductId = _products.firstOrNull?.id;
       });
       return;
@@ -262,26 +237,15 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
     if (productDetailResponse.productDetails.isEmpty) {
       setState(() {
         _queryProductError = null;
-        _isAvailable = isAvailable;
         _products = productDetailResponse.productDetails;
         _purchases = <PurchaseDetails>[];
-        _notFoundIds = productDetailResponse.notFoundIDs;
-        _consumables = <String>[];
-        _purchasePending = false;
-        _loading = false;
         _selectedProductId = _products.firstOrNull?.id;
       });
       return;
     }
 
-    final List<String> consumables = await ConsumableStore.load();
     setState(() {
-      _isAvailable = isAvailable;
       _products = productDetailResponse.productDetails;
-      _notFoundIds = productDetailResponse.notFoundIDs;
-      _consumables = consumables;
-      _purchasePending = false;
-      _loading = false;
       _selectedProductId = _products.firstOrNull?.id;
     });
   }
@@ -297,17 +261,17 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
           if (EasyLoading.isShow) {
             EasyLoading.dismiss();
           }
-          await locator<AppDatabase>().setPastProduct(Product(
-            expireDate: DateTime.now().add(Duration(
-              days: 3 +
-                  ((purchaseDetails.productID == _weekId)
-                      ? 7
-                      : purchaseDetails.productID == _monthId
-                          ? 30
-                          : 365),
-            )),
-            productID: purchaseDetails.productID,
-          ));
+          // await locator<AppDatabase>().setPastProduct(Product(
+          //   expireDate: DateTime.now().add(Duration(
+          //     days: 3 +
+          //         ((purchaseDetails.productID == _weekId)
+          //             ? 7
+          //             : purchaseDetails.productID == _monthId
+          //                 ? 30
+          //                 : 365),
+          //   )),
+          //   productID: purchaseDetails.productID,
+          // ));
           EasyLoading.showSuccess(
             'You are Premium. Can\'t purchase',
           );
@@ -319,19 +283,19 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
           EasyLoading.showError('Something error');
           break;
         case PurchaseStatus.restored:
-          await locator<AppDatabase>().setPastProduct(Product(
-            expireDate: DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(purchaseDetails.transactionDate.toString()))
-                .add(Duration(
-              days: 3 +
-                  ((purchaseDetails.productID == _weekId)
-                      ? 7
-                      : purchaseDetails.productID == _monthId
-                          ? 30
-                          : 365),
-            )),
-            productID: purchaseDetails.productID,
-          ));
+          // await locator<AppDatabase>().setPastProduct(Product(
+          //   expireDate: DateTime.fromMillisecondsSinceEpoch(
+          //           int.parse(purchaseDetails.transactionDate.toString()))
+          //       .add(Duration(
+          //     days: 3 +
+          //         ((purchaseDetails.productID == _weekId)
+          //             ? 7
+          //             : purchaseDetails.productID == _monthId
+          //                 ? 30
+          //                 : 365),
+          //   )),
+          //   productID: purchaseDetails.productID,
+          // ));
           EasyLoading.showSuccess(
             'Restored your plan',
           );
@@ -350,7 +314,6 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
     setState(() {
       _purchases.add(purchaseDetails);
-      _purchasePending = false;
     });
   }
 
@@ -366,29 +329,25 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
   }
 
   showPendingUI() {
-    setState(() {
-      _purchasePending = true;
-    });
+    setState(() {});
   }
 
   handleError(IAPError error) {
-    setState(() {
-      _purchasePending = false;
-    });
+    setState(() {});
   }
 
-  handlePurchaseButtonAsync() async {
+  handlePurchaseButtonAsync(ProductDetails? productDetails) async {
     debugPrint("handlePurchaseButtonAsync() called");
 
-    Product? product = locator<AppDatabase>().getPastProduct();
-    if (product != null && product.expireDate.isAfter(DateTime.now())) {
-      EasyLoading.showInfo(
-        'You are Premium. Can\'t purchase',
-      );
-      return;
-    }
+    // Product? product = locator<AppDatabase>().getPastProduct();
+    // if (product != null && product.expireDate.isAfter(DateTime.now())) {
+    //   EasyLoading.showInfo(
+    //     'You are Premium. Can\'t purchase',
+    //   );
+    //   return;
+    // }
 
-    ProductDetails? productDetails = _getSelectedProductDetails();
+    // ProductDetails? productDetails = _getSelectedProductDetails();
 
     if (productDetails == null) {
       return;
@@ -412,9 +371,7 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
     await _inAppPurchase
         .buyNonConsumable(purchaseParam: purchaseParam)
         .catchError((error) {
-      EasyLoading.showError(
-        'Can\'t purchase',
-      );
+      EasyLoading.showError('Can\'t purchase');
       return true;
     });
   }
@@ -472,12 +429,12 @@ class ExamplePaymentQueueDelegate implements SKPaymentQueueDelegateWrapper {
 extension ProductDetailsExt on ProductDetails {
   String parseDuration() {
     switch (id) {
-      case _weekId:
-        return 'week';
-      case _monthId:
-        return 'month';
-      case _yearId:
-        return 'year';
+      // case _weekId:
+      //   return 'week';
+      // case _monthId:
+      //   return 'month';
+      // case _yearId:
+      //   return 'year';
       default:
         return "Undefine";
     }

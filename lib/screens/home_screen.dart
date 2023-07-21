@@ -1,6 +1,5 @@
 import 'package:com.qksoft.storysaverfacebook/models/image_modal.dart';
 import 'package:com.qksoft.storysaverfacebook/purchase_module/purchase_page_v2.dart';
-import 'package:com.qksoft.storysaverfacebook/purchase_module/example_purchase.dart';
 import 'package:com.qksoft.storysaverfacebook/screens/popup/create_note_modal.dart';
 import 'package:com.qksoft.storysaverfacebook/screens/setting_screen.dart';
 import 'package:com.qksoft.storysaverfacebook/widgets/test_calendar.dart';

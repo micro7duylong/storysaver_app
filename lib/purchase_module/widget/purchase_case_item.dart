@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class PurchaseCaseItem extends StatelessWidget {
   const PurchaseCaseItem(
       {super.key,
@@ -21,7 +20,7 @@ class PurchaseCaseItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 32),
         height: 68,
         decoration: BoxDecoration(
-          color: Colors.blueAccent,
+          color: Colors.blueGrey[700],
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
@@ -43,26 +42,6 @@ class PurchaseCaseItem extends StatelessWidget {
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
-            ),
-            Container(
-              height: 27,
-              width: 27,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isSelected
-                    ?  Colors.green[500]
-                    : Colors.white
-              ),
-              child: Center(
-                child: Container(
-                  height: 17,
-                  width: 17,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isSelected ? Colors.green : Colors.grey,
-                  ),
-                ),
-              ),
             ),
           ],
         ),
