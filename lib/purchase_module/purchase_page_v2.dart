@@ -41,7 +41,9 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
   List<PurchaseDetails> _purchases = <PurchaseDetails>[];
   String? _queryProductError;
   String? _selectedProductId;
-
+  List<ProductDetails> getFilteredProducts() {
+    return _products.whereIndexed((index, product) => index % 2 != 0).toList();
+  }
   @override
   void initState() {
     final Stream<List<PurchaseDetails>> purchaseUpdated =
@@ -72,7 +74,6 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
   @override
   Widget build(BuildContext context) {
     bool isError = _queryProductError != null;
-
     if (isError) {
       return Container(
         color: Colors.blueGrey,
@@ -86,15 +87,31 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
     }
 
     final List<Widget> productList = <Widget>[];
+    List<ProductDetails> filteredProducts = getFilteredProducts();
 
-    if (_products.isEmpty) {
+    // if (_products.isEmpty) {
+    //   productList.add(const SizedBox(
+    //     height: 20,
+    //   ));
+    // } else {
+    //   productList.addAll(
+    //     _products.mapIndexed(
+    //       (index, product) => PurchaseCaseItem(
+    //           value: product.price,
+    //           duration: product.parseDuration(),
+    //           onPressed: () => handlePurchaseButtonAsync(product),
+    //           isSelected: _selectedProductId == product.id),
+    //     ),
+    //   );
+    // }
+    if (filteredProducts.isEmpty) {
       productList.add(const SizedBox(
         height: 20,
       ));
     } else {
       productList.addAll(
-        _products.mapIndexed(
-          (index, product) => PurchaseCaseItem(
+        filteredProducts.map(
+              (product) => PurchaseCaseItem(
               value: product.price,
               duration: product.parseDuration(),
               onPressed: () => handlePurchaseButtonAsync(product),
@@ -102,7 +119,6 @@ class _PurchasePageV2State extends State<PurchasePageV2> {
         ),
       );
     }
-
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
@@ -424,14 +440,15 @@ class ExamplePaymentQueueDelegate implements SKPaymentQueueDelegateWrapper {
 extension ProductDetailsExt on ProductDetails {
   String parseDuration() {
     switch (id) {
-      // case _weekId:
-      //   return 'week';
-      // case _monthId:
-      //   return 'month';
-      // case _yearId:
-      //   return 'year';
+      case _weekId:
+        return 'week';
+      case _monthId:
+        return 'month';
+      case _yearId:
+        return 'year';
       default:
         return "Undefine";
+      
     }
   }
 
